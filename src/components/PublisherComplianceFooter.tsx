@@ -1,39 +1,52 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Linking } from 'react-native';
-import Constants from 'expo-constants';
+﻿import React from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Linking, Alert } from 'react-native';
+import { useTheme } from '../context/ThemeContext';
+
+const PRIVACY_URL = 'https://sites.google.com/view/dzairmc-news-privacy/accueil';
+const FACEBOOK_URL = 'https://www.facebook.com/dzairmcnews';
+const CONTACT_EMAIL = 'dzairmcnews@gmail.com';
 
 export const PublisherComplianceFooter: React.FC = React.memo(() => {
-  const publisherInfo = Constants.expoConfig?.extra?.publisherInfo;
+  const { colors } = useTheme();
 
-  const openUrl = async (url?: string) => {
-    if (url && (await Linking.canOpenURL(url))) {
+  const openExternal = async (url: string) => {
+    try {
       await Linking.openURL(url);
+    } catch {
+      Alert.alert('تنبيه', 'تعذر فتح الرابط حالياً.');
     }
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.publisherTitle}>
-        المصدر: {publisherInfo?.name || 'دزاير أم سي NEWS'}
+    <View style={[styles.container, { backgroundColor: colors.surface, borderTopColor: colors.border }]}>
+      <Text style={[styles.publisherTitle, { color: colors.text }]}>
+        المصدر: دزاير أم سي NEWS (DzairMC News)
       </Text>
-      <Text style={styles.description}>
-        قناة إخبارية ومعلوماتية مستقلة تقدم تغطية شاملة للأخبار المحلية والدولية.
+      <Text style={[styles.description, { color: colors.textSecondary }]}>
+        قناة إخبارية ومعلوماتية مستقلة تقدم تغطية شاملة لأخبار الجزائر والجالية والمنتخب الوطني.
       </Text>
 
       <View style={styles.linksRow}>
-        <TouchableOpacity onPress={() => openUrl(publisherInfo?.privacyPolicyUrl)}>
-          <Text style={styles.linkText}>سياسة الخصوصية</Text>
+        <TouchableOpacity onPress={() => openExternal(PRIVACY_URL)}>
+          <Text style={[styles.linkText, { color: colors.accent }]}>سياسة الخصوصية</Text>
         </TouchableOpacity>
-        <Text style={styles.divider}>|</Text>
-        <TouchableOpacity onPress={() => openUrl(publisherInfo?.facebookPageUrl)}>
-          <Text style={styles.linkText}>صفحة الفيسبوك</Text>
+        <Text style={[styles.divider, { color: colors.textSecondary }]}>|</Text>
+        <TouchableOpacity onPress={() => openExternal(FACEBOOK_URL)}>
+          <Text style={[styles.linkText, { color: colors.accent }]}>صفحة الفيسبوك</Text>
         </TouchableOpacity>
-        <Text style={styles.divider}>|</Text>
-        <TouchableOpacity onPress={() => openUrl(`mailto:${publisherInfo?.contactEmail}`)}>
-          <Text style={styles.linkText}>اتصل بنا</Text>
+        <Text style={[styles.divider, { color: colors.textSecondary }]}>|</Text>
+        <TouchableOpacity
+          onPress={() =>
+            Alert.alert('اتصل بنا', `البريد الرسمي للقناة:\n${CONTACT_EMAIL}`, [
+              { text: 'إرسال بريد', onPress: () => openExternal(`mailto:${CONTACT_EMAIL}`) },
+              { text: 'إغلاق', style: 'cancel' },
+            ])
+          }
+        >
+          <Text style={[styles.linkText, { color: colors.accent }]}>اتصل بنا</Text>
         </TouchableOpacity>
       </View>
-      <Text style={styles.copyright}>
+      <Text style={[styles.copyright, { color: colors.textSecondary }]}>
         © {new Date().getFullYear()} DzairMC News. جميع الحقوق محفوظة.
       </Text>
     </View>
@@ -45,21 +58,17 @@ PublisherComplianceFooter.displayName = 'PublisherComplianceFooter';
 const styles = StyleSheet.create({
   container: {
     padding: 20,
-    backgroundColor: '#F9FAFB',
     borderTopWidth: 1,
-    borderTopColor: '#E5E7EB',
     marginTop: 24,
     alignItems: 'center',
   },
   publisherTitle: {
     fontSize: 14,
-    fontWeight: '700',
-    color: '#374151',
+    fontWeight: '800',
     marginBottom: 4,
   },
   description: {
     fontSize: 12,
-    color: '#6B7280',
     textAlign: 'center',
     marginBottom: 12,
     lineHeight: 18,
@@ -71,15 +80,12 @@ const styles = StyleSheet.create({
   },
   linkText: {
     fontSize: 12,
-    color: '#2563EB',
-    fontWeight: '600',
+    fontWeight: '700',
   },
   divider: {
     marginHorizontal: 8,
-    color: '#9CA3AF',
   },
   copyright: {
     fontSize: 11,
-    color: '#9CA3AF',
   },
 });

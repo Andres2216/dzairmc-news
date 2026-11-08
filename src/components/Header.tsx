@@ -1,7 +1,8 @@
-import React from 'react';
+﻿import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNotifications } from '../context/NotificationContext';
+import { useTheme } from '../context/ThemeContext';
 
 interface HeaderProps {
   title?: string;
@@ -15,10 +16,12 @@ export const Header: React.FC<HeaderProps> = React.memo(({
   onNotificationPress,
 }) => {
   const { unreadCount } = useNotifications();
+  const { isDark, toggleTheme, colors } = useTheme();
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.headerBg }]}>
       <View style={styles.brandContainer}>
+        <View style={styles.brandDot} />
         <Text style={styles.title}>{title}</Text>
       </View>
 
@@ -33,6 +36,19 @@ export const Header: React.FC<HeaderProps> = React.memo(({
             <Ionicons name="search-outline" size={22} color="#FFFFFF" />
           </TouchableOpacity>
         )}
+
+        <TouchableOpacity
+          style={styles.iconButton}
+          onPress={toggleTheme}
+          accessibilityLabel="تبديل المظهر"
+          activeOpacity={0.7}
+        >
+          <Ionicons
+            name={isDark ? 'sunny' : 'moon-outline'}
+            size={21}
+            color={isDark ? '#FBBF24' : '#FFFFFF'}
+          />
+        </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.iconButton}
@@ -59,7 +75,6 @@ Header.displayName = 'Header';
 const styles = StyleSheet.create({
   container: {
     height: 56,
-    backgroundColor: '#111827',
     flexDirection: 'row-reverse',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -74,9 +89,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row-reverse',
     alignItems: 'center',
   },
+  brandDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: '#D97706',
+    marginLeft: 8,
+  },
   title: {
     fontSize: 18,
-    fontWeight: '700',
+    fontWeight: '800',
     color: '#F9FAFB',
     letterSpacing: 0.5,
   },
@@ -85,12 +107,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   iconButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 38,
+    height: 38,
+    borderRadius: 19,
     justifyContent: 'center',
     alignItems: 'center',
-    marginLeft: 8,
+    marginRight: 4,
     position: 'relative',
   },
   badge: {

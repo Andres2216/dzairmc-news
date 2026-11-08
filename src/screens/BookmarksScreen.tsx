@@ -1,15 +1,17 @@
-import React from 'react';
+﻿import React from 'react';
 import { View, Text, StyleSheet, FlatList, SafeAreaView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Header } from '../components/Header';
 import { ArticleCard } from '../components/ArticleCard';
 import { useBookmarks } from '../context/BookmarkContext';
+import { useTheme } from '../context/ThemeContext';
 
 export const BookmarksScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
   const { bookmarks } = useBookmarks();
+  const { colors } = useTheme();
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
       <Header onNotificationPress={() => navigation.navigate('Notifications')} />
       <FlatList
         data={bookmarks}
@@ -20,12 +22,18 @@ export const BookmarksScreen: React.FC<{ navigation: any }> = ({ navigation }) =
             onPress={(art) => navigation.navigate('ArticleDetail', { article: art })}
           />
         )}
-        contentContainerStyle={bookmarks.length === 0 ? styles.emptyContainer : styles.listPadding}
+        contentContainerStyle={
+          bookmarks.length === 0 ? styles.emptyContainer : styles.listPadding
+        }
         ListEmptyComponent={
           <View style={styles.emptyState}>
-            <Ionicons name="bookmark-outline" size={64} color="#9CA3AF" />
-            <Text style={styles.emptyTitle}>لا توجد مقالات محفوظة</Text>
-            <Text style={styles.emptySubtitle}>احفظ الأخبار التي تهمك لقراءتها لاحقاً</Text>
+            <Ionicons name="bookmark-outline" size={64} color={colors.textSecondary} />
+            <Text style={[styles.emptyTitle, { color: colors.text }]}>
+              لا توجد مقالات أو فيديوهات محفوظة
+            </Text>
+            <Text style={[styles.emptySubtitle, { color: colors.textSecondary }]}>
+              اضغط على أيقونة الحفظ في أي خبر للرجوع إليه وقراءته لاحقاً
+            </Text>
           </View>
         }
       />
@@ -34,13 +42,8 @@ export const BookmarksScreen: React.FC<{ navigation: any }> = ({ navigation }) =
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#F3F4F6',
-  },
-  listPadding: {
-    padding: 16,
-  },
+  container: { flex: 1 },
+  listPadding: { padding: 16 },
   emptyContainer: {
     flexGrow: 1,
     justifyContent: 'center',
@@ -52,14 +55,13 @@ const styles = StyleSheet.create({
   },
   emptyTitle: {
     fontSize: 18,
-    fontWeight: '700',
-    color: '#374151',
+    fontWeight: '800',
     marginTop: 16,
   },
   emptySubtitle: {
     fontSize: 14,
-    color: '#6B7280',
     textAlign: 'center',
     marginTop: 8,
+    lineHeight: 22,
   },
 });

@@ -2,7 +2,7 @@ module.exports = {
   expo: {
     name: "DzairMC News",
     slug: "dzairmc-news",
-    version: "1.2.0",
+    version: "1.3.0",
     orientation: "portrait",
     icon: "./assets/icon.png",
     userInterfaceStyle: "light",
@@ -13,11 +13,12 @@ module.exports = {
     },
     assetBundlePatterns: ["**/*"],
     ios: {
-      supportsTablet: true
+      supportsTablet: true,
+      bundleIdentifier: "com.lakomess.dzairmcnews"
     },
     android: {
       package: "com.lakomess.dzairmcnews",
-      versionCode: 12,
+      versionCode: 13,
       adaptiveIcon: {
         foregroundImage: "./assets/adaptive-icon.png",
         backgroundColor: "#111827"
@@ -44,17 +45,19 @@ module.exports = {
         facebookPageUrl: "https://www.facebook.com/dzairmcnews"
       },
       admob: {
-        androidAppId: "ca-app-pub-3940256099942544~3347511713",
-        bannerUnitId: "ca-app-pub-3940256099942544/6300978111",
-        interstitialUnitId: "ca-app-pub-3940256099942544/1033173712",
-        appOpenUnitId: "ca-app-pub-3940256099942544/9257390721"
+        androidAppId: "ca-app-pub-4827532078352750~8947827391",
+        bannerUnitId: "ca-app-pub-4827532078352750~5841140721",
+        interstitialUnitId: "ca-app-pub-4827532078352750~7097523247",
+        appOpenUnitId: "ca-app-pub-4827532078352750~7287692563"
       }
     },
     plugins: [
+      "expo-font",
       [
         "react-native-google-mobile-ads",
         {
-          androidAppId: "ca-app-pub-3940256099942544~3347511713"
+          androidAppId: "ca-app-pub-4827532078352750~8947827391",
+          iosAppId: "ca-app-pub-4827532078352750~8947827391"
         }
       ]
     ]
